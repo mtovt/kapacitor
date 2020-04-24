@@ -115,8 +115,8 @@ func (s *Service) Test(options interface{}) error {
 	)
 }
 
-func (s *Service) Alert(teams []string, recipients []string, recoveryAction string, level alert.Level, message, entityID string, t time.Time, eventDetails string, details models.Result) error {
-	req, err := s.preparePost(teams, recipients, recoveryAction, level, message, entityID, t, eventDetails, details)
+func (s *Service) Alert(teams []string, recipients []string, recoveryAction string, level alert.Level, message, entityID string, t time.Time, description string, details models.Result) error {
+	req, err := s.preparePost(teams, recipients, recoveryAction, level, message, entityID, t, description, details)
 	if err != nil {
 		return errors.Wrap(err, "failed to prepare API request")
 	}
@@ -143,7 +143,7 @@ func (s *Service) Alert(teams []string, recipients []string, recoveryAction stri
 	return nil
 }
 
-func (s *Service) preparePost(teams []string, recipients []string, recoveryAction string, level alert.Level, message, entityID string, t time.Time, eventDetails string, details models.Result) (*http.Request, error) {
+func (s *Service) preparePost(teams []string, recipients []string, recoveryAction string, level alert.Level, message, entityID string, t time.Time, description string, details models.Result) (*http.Request, error) {
 	c := s.config()
 	if !c.Enabled {
 		return nil, errors.New("service is not enabled")
@@ -192,8 +192,8 @@ func (s *Service) preparePost(teams []string, recipients []string, recoveryActio
 		ogData["priority"] = priority
 
 		// Use event details as description if available
-		if c.Details && len(eventDetails) > 0 {
-			ogData["description"] = eventDetails
+		if len(description) > 0 {
+			ogData["description"] = description
 		} else {
 			// Otherwise encode details as description
 			b, err := json.Marshal(details)
