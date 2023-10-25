@@ -1,4 +1,30 @@
-CHANGELOG for Kapacitor master commit 4f8a995be494bbca09af981f01ae985e23e98087
+CHANGELOG for Kapacitor master commit 957d384bcb7c9dde63409477e202e614323ecbf3
+
+## v1.7.1 [2023-10-20]
+----------------------
+
+### Bug Fixes
+
+1. [2784](https://github.com/influxdata/kapacitor/pull/2784): Security fix (CVE-2023-44487: HTTP/2 Rapid Reset attack)
+1. [2783](https://github.com/influxdata/kapacitor/pull/2783): Security fix (CVE-2023-44487: HTTP/2 Rapid Reset attack)
+
+## v1.7.0 [2023-08-18]
+----------------------
+
+### Features
+
+1. [dbcc77e3](https://github.com/influxdata/kapacitor/commit/dbcc77e3) Rewrite topic store for incremental update
+
+## v1.6.6 [2023-04-12]
+----------------------
+
+### Features
+
+1. [025c7067](https://github.com/influxdata/kapacitor/commit/025c7067) Add JWT meta API authentication
+
+#### Bug Fixes
+
+1. [3bfeb14a](https://github.com/influxdata/kapacitor/commit/3bfeb14a) Support InfluxDB 1.9.6 and OpenTSB by implementing WritePointsPrivileged
 
 ## v1.6.5 [2021-07-12]
 ----------------------

@@ -7,7 +7,7 @@ executors:
       # NOTE: To upgrade the Go version, first push the upgrade to the cross-builder Dockerfile in the edge repo,
       # then update the version here to match. Until we finish the migration to using the cross-builder image,
       # you'll also need to update references to `cimg/go` and `GO_VERSION` in this file.
-      - image: quay.io/influxdb/cross-builder:go1.20.4-147b512cba0dbd7ea86df9d4e3c288e36c11e05a
+      - image: quay.io/influxdb/cross-builder:go1.20.10-latest
     resource_class: large
   linux-amd64:
     machine:
@@ -59,7 +59,7 @@ commands:
       This will build and publish release packages for tag "$CIRCLE_TAG"
     steps:
       - run: |
-          ./build.py --debug --clean --generate --package --package-udfs --platform=all --arch=all --checksum
+          ./build.py --debug --clean --generate --package --package-udfs --platform=all --arch=all --checksum --release --version "${CIRCLE_TAG}"
       - persist_to_workspace:
           root: .
           paths:
@@ -135,7 +135,12 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - run: |
-          find /tmp/workspace/build -type f -exec rsign "{}" \;
+          find /tmp/workspace/build -type f -exec rsign '{}' \; -exec sh -c '
+            # Since all artifacts are present, sign them here. This saves Circle
+            # credits over spinning up another instance just to separate out the
+            # checksum job.
+            sha256sum "{}" >> "/tmp/workspace/build/kapacitor.${CIRCLE_TAG}.digests"
+          ' \;
       - persist_to_workspace:
           root: /tmp/workspace
           paths:
